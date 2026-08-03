@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-unbounded), var(--font-manrope), sans-serif;
+
+  --color-ink: #050508;
+  --color-ink-soft: #0a0a12;
+  --color-surface: #10101c;
+  --color-glass: rgba(255, 255, 255, 0.04);
+  --color-glass-strong: rgba(255, 255, 255, 0.08);
+  --color-line: rgba(255, 255, 255, 0.1);
+  --color-accent: #22d3ee;
+  --color-accent-2: #818cf8;
+  --color-accent-3: #e879f9;
+
+  --shadow-glow-sm: 0 0 24px rgba(34, 211, 238, 0.35);
+  --shadow-glow: 0 0 60px rgba(129, 140, 248, 0.4);
+  --shadow-card: 0 24px 60px -24px rgba(0, 0, 0, 0.8);
+
+  --animate-float: float 8s ease-in-out infinite;
+  --animate-float-slow: float 14s ease-in-out infinite;
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-pulse-glow: pulse-glow 4s ease-in-out infinite;
+  --animate-spin-slow: spin 18s linear infinite;
+  --animate-gradient-x: gradient-x 10s ease infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) translateX(0);
+    }
+    50% {
+      transform: translateY(-24px) translateX(12px);
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 0.4;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.08);
+    }
+  }
+
+  @keyframes gradient-x {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    background: var(--color-ink);
+    color: #e7e9f0;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .dark body {
+    background: var(--color-ink);
+    color: #e7e9f0;
+  }
+
+  ::selection {
+    background: rgba(129, 140, 248, 0.35);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #07070c;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #22d3ee66, #818cf866);
+    border-radius: 999px;
+    border: 2px solid #07070c;
+  }
+}
+
+@utility glass {
+  background: var(--color-glass);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid var(--color-line);
+}
+
+@utility glass-strong {
+  background: var(--color-glass-strong);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+@utility text-gradient {
+  background: linear-gradient(100deg, #22d3ee 0%, #818cf8 45%, #e879f9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@utility mesh-gradient {
+  background-image: radial-gradient(at 20% 20%, #22d3ee22 0, transparent 50%),
+    radial-gradient(at 80% 10%, #818cf833 0, transparent 45%),
+    radial-gradient(at 60% 80%, #e879f922 0, transparent 50%),
+    radial-gradient(at 10% 90%, #22d3ee1a 0, transparent 45%);
+}
+
+@utility ring-glow {
+  box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.4), 0 0 40px rgba(129, 140, 248, 0.25);
+}
+
+.section-padding {
+  padding-block: clamp(5rem, 10vw, 8.5rem);
+}
+
+.container-x {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 76rem;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .container-x {
+    padding-inline: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
