@@ -53,10 +53,8 @@ export function Grid3D() {
       aria-hidden
     >
       <div
-        className="absolute left-1/2 top-1/2 h-[160vmax] w-[160vmax] -translate-x-1/2 -translate-y-1/2"
+        className="grid-3d-line absolute left-1/2 top-1/2 h-[160vmax] w-[160vmax] -translate-x-1/2 -translate-y-1/2"
         style={{
-          backgroundImage:
-            "linear-gradient(rgba(129,140,248,0.14) 1px, transparent 1px), linear-gradient(90deg, rgba(129,140,248,0.14) 1px, transparent 1px), linear-gradient(rgba(34,211,238,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.08) 1px, transparent 1px)",
           backgroundSize: "60px 60px, 60px 60px, 300px 300px, 300px 300px",
           transform: "rotateX(35deg)",
           transformStyle: "preserve-3d",
@@ -65,4 +63,3 @@ export function Grid3D() {
     </div>
   );
 }
-

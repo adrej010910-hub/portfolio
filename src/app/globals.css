@@ -97,6 +97,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   .dark body {
@@ -104,9 +105,20 @@
     color: #e7e9f0;
   }
 
+  /* Light theme */
+  :root:not(.dark) body {
+    background: #f4f6fb;
+    color: #0f172a;
+  }
+
   ::selection {
     background: rgba(129, 140, 248, 0.35);
     color: #fff;
+  }
+
+  :root:not(.dark) ::selection {
+    background: rgba(99, 102, 241, 0.25);
+    color: #1e1b4b;
   }
 
   ::-webkit-scrollbar {
@@ -117,10 +129,26 @@
     background: #07070c;
   }
 
+  :root:not(.dark) ::-webkit-scrollbar-track {
+    background: #e6e9f2;
+  }
+
   ::-webkit-scrollbar-thumb {
     background: linear-gradient(180deg, #22d3ee66, #818cf866);
     border-radius: 999px;
     border: 2px solid #07070c;
+  }
+
+  :root:not(.dark) ::-webkit-scrollbar-thumb {
+    border: 2px solid #e6e9f2;
+  }
+
+  /* Grid3D perspective lines (dark theme default) */
+  .grid-3d-line {
+    background-image: linear-gradient(rgba(129, 140, 248, 0.14) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(129, 140, 248, 0.14) 1px, transparent 1px),
+      linear-gradient(rgba(34, 211, 238, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34, 211, 238, 0.08) 1px, transparent 1px);
   }
 }
 
@@ -139,7 +167,7 @@
 }
 
 @utility text-gradient {
-  background: linear-gradient(100deg, #22d3ee 0%, #818cf8 45%, #e879f9 100%);
+  background: linear-gradient(100deg, #0891b2 0%, #6366f1 45%, #c026d3 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -180,6 +208,191 @@
   .container-x {
     padding-inline: 2rem;
   }
+}
+
+/* =====================================================
+   LIGHT THEME OVERRIDES
+   The components hardcode dark-only utility classes
+   (text-white, text-slate-*, bg-ink, bg-white/[x], etc.).
+   This layer re-maps those classes for :root:not(.dark).
+   ===================================================== */
+:root:not(.dark) {
+  --color-ink: #f4f6fb;
+  --color-ink-soft: #eef1f8;
+  --color-surface: #ffffff;
+  --color-glass: rgba(255, 255, 255, 0.6);
+  --color-glass-strong: rgba(255, 255, 255, 0.75);
+  --color-line: rgba(15, 23, 42, 0.1);
+}
+
+:root:not(.dark) body {
+  background: var(--color-ink);
+  color: #0f172a;
+}
+
+/* Text color remaps */
+:root:not(.dark) .text-white {
+  color: #0f172a;
+}
+/* Keep white text on colorful gradient buttons readable in light mode */
+:root:not(.dark) .bg-gradient-to-r.text-white,
+:root:not(.dark) .bg-gradient-to-br.text-white,
+:root:not(.dark) .bg-gradient-to-t.text-white,
+:root:not(.dark) .bg-gradient-to-b.text-white,
+:root:not(.dark) .bg-gradient-to-br.text-white,
+:root:not(.dark) [class*="bg-gradient-to"].text-white {
+  color: #ffffff;
+}
+:root:not(.dark) .text-slate-200 {
+  color: #334155;
+}
+:root:not(.dark) .text-slate-300 {
+  color: #475569;
+}
+:root:not(.dark) .text-slate-400 {
+  color: #64748b;
+}
+:root:not(.dark) .text-slate-500 {
+  color: #94a3b8;
+}
+:root:not(.dark) .text-slate-400\/70,
+:root:not(.dark) .text-slate-400\/80,
+:root:not(.dark) .text-slate-300\/80,
+:root:not(.dark) .text-slate-300\/70 {
+  color: #64748b;
+}
+:root:not(.dark) .text-white\/\[0\.06\],
+:root:not(.dark) .text-white\/\[0\.12\] {
+  color: rgba(15, 23, 42, 0.08);
+}
+
+/* Background remaps */
+:root:not(.dark) .bg-ink {
+  background-color: #ffffff;
+}
+:root:not(.dark) .bg-ink\/90 {
+  background-color: rgba(244, 246, 251, 0.92);
+}
+:root:not(.dark) .bg-white\/\[0\.02\],
+:root:not(.dark) .bg-white\/\[0\.03\],
+:root:not(.dark) .bg-white\/\[0\.04\],
+:root:not(.dark) .bg-white\/\[0\.05\],
+:root:not(.dark) .bg-white\/\[0\.06\],
+:root:not(.dark) .bg-white\/\[0\.08\],
+:root:not(.dark) .bg-white\/\[0\.12\] {
+  background-color: rgba(15, 23, 42, 0.04);
+}
+:root:not(.dark) .bg-white\/\[0\.6\] {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Border remaps */
+:root:not(.dark) .border-white\/\[0\.06\],
+:root:not(.dark) .border-white\/\[0\.07\],
+:root:not(.dark) .border-white\/\[0\.08\],
+:root:not(.dark) .border-white\/\[0\.1\],
+:root:not(.dark) .border-white\/10,
+:root:not(.dark) .border-white\/25 {
+  border-color: rgba(15, 23, 42, 0.12);
+}
+
+/* Glass variants */
+:root:not(.dark) .glass {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(15, 23, 42, 0.1);
+}
+:root:not(.dark) .glass-strong {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(15, 23, 42, 0.1);
+}
+:root:not(.dark) .glass:hover {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+/* Navbar pill highlight */
+:root:not(.dark) .bg-white\/\[0\.08\] {
+  background-color: rgba(15, 23, 42, 0.08);
+}
+
+/* Marquee gradient edges */
+:root:not(.dark) .from-ink {
+  --tw-gradient-from: #f4f6fb;
+  --tw-gradient-stops: var(--tw-gradient-via-stops), var(--tw-gradient-to-stops);
+}
+:root:not(.dark) .to-transparent {
+  --tw-gradient-to: transparent;
+}
+
+/* Hero radial vignette */
+:root:not(.dark) .bg-\[radial-gradient\(ellipse_at_center\,transparent_35\%\,\#050508_95\%\)\] {
+  background: radial-gradient(ellipse at center, transparent 35%, #f4f6fb 95%);
+}
+
+/* Grid3D lines lighter in light mode */
+:root:not(.dark) .grid-3d-line {
+  background-image: linear-gradient(rgba(99, 102, 241, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.12) 1px, transparent 1px),
+    linear-gradient(rgba(34, 211, 238, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.08) 1px, transparent 1px);
+}
+
+/* Project mock card background */
+:root:not(.dark) .bg-\[\#0a0a12\] {
+  background-color: #eef1f8;
+}
+:root:not(.dark) .from-\[\#0a0a12\] {
+  --tw-gradient-from: #eef1f8;
+  --tw-gradient-stops: var(--tw-gradient-via-stops), var(--tw-gradient-to-stops);
+}
+
+/* Badge in project mock */
+:root:not(.dark) .bg-black\/50 {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+:root:not(.dark) .text-white\/90 {
+  color: #0f172a;
+}
+
+/* Inputs */
+:root:not(.dark) input,
+:root:not(.dark) textarea {
+  background-color: rgba(15, 23, 42, 0.04);
+  color: #0f172a;
+  border-color: rgba(15, 23, 42, 0.12);
+}
+:root:not(.dark) input::placeholder,
+:root:not(.dark) textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* Footer mesh */
+:root:not(.dark) .mesh-gradient {
+  opacity: 0.35;
+}
+
+/* Conic gradient avatar ring */
+:root:not(.dark) .bg-ink[class*="absolute"] {
+  background-color: #ffffff;
+}
+
+/* Hover state remaps for light theme */
+:root:not(.dark) .hover\:text-white:hover {
+  color: #0f172a;
+}
+:root:not(.dark) .hover\:bg-white\/\[0\.05\]:hover,
+:root:not(.dark) .hover\:bg-white\/\[0\.06\]:hover,
+:root:not(.dark) .hover\:bg-white\/\[0\.08\]:hover,
+:root:not(.dark) .hover\:bg-white\/\[0\.12\]:hover {
+  background-color: rgba(15, 23, 42, 0.08);
+}
+:root:not(.dark) .hover\:border-white\/25:hover {
+  border-color: rgba(15, 23, 42, 0.2);
+}
+:root:not(.dark) .group-hover\:text-white:hover {
+  color: #0f172a;
+}
+:root:not(.dark) .focus\:bg-white\/\[0\.06\]:focus {
+  background-color: rgba(15, 23, 42, 0.06) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
