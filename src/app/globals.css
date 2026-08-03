@@ -239,7 +239,6 @@
 :root:not(.dark) .bg-gradient-to-br.text-white,
 :root:not(.dark) .bg-gradient-to-t.text-white,
 :root:not(.dark) .bg-gradient-to-b.text-white,
-:root:not(.dark) .bg-gradient-to-br.text-white,
 :root:not(.dark) [class*="bg-gradient-to"].text-white {
   color: #ffffff;
 }
@@ -264,6 +263,24 @@
 :root:not(.dark) .text-white\/\[0\.06\],
 :root:not(.dark) .text-white\/\[0\.12\] {
   color: rgba(15, 23, 42, 0.08);
+}
+
+/* Accent text colors that are too light on white — darken for contrast */
+:root:not(.dark) .text-cyan-200,
+:root:not(.dark) .text-cyan-300,
+:root:not(.dark) .text-cyan-400,
+:root:not(.dark) .group-hover\:text-cyan-100,
+:root:not(.dark) .group-hover\:text-cyan-200,
+:root:not(.dark) .hover\:text-cyan-200,
+:root:not(.dark) .hover\:text-cyan-300 {
+  color: #0891b2;
+}
+:root:not(.dark) .text-emerald-300,
+:root:not(.dark) .text-emerald-200\/90 {
+  color: #047857;
+}
+:root:not(.dark) .text-rose-400 {
+  color: #e11d48;
 }
 
 /* Background remaps */
@@ -388,7 +405,7 @@
 :root:not(.dark) .hover\:border-white\/25:hover {
   border-color: rgba(15, 23, 42, 0.2);
 }
-:root:not(.dark) .group-hover\:text-white:hover {
+:root:not(.dark) .group-hover\:text-white:is(:where(.group):hover *) {
   color: #0f172a;
 }
 :root:not(.dark) .focus\:bg-white\/\[0\.06\]:focus {
