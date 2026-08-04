@@ -2,22 +2,39 @@
 
 import { useState, type FormEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { CheckCircle2, Loader2, Send, User, Mail, Send as TelegramIcon, MessageSquare } from "lucide-react";
+import { CheckCircle2, Loader2, Send, User, Mail, Send as TelegramIcon, MessageSquare, Wallet } from "lucide-react";
 import { Reveal } from "@/components/effects/reveal";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { siteConfig } from "@/config/site";
+import { services, siteConfig } from "@/config/site";
 
 type FormState = {
   name: string;
   email: string;
   telegram: string;
+  service: string;
+  budget: string;
   message: string;
 };
 
 type Errors = Partial<Record<keyof FormState, string>>;
 
-const initialForm: FormState = { name: "", email: "", telegram: "", message: "" };
+const initialForm: FormState = {
+  name: "",
+  email: "",
+  telegram: "",
+  service: "",
+  budget: "",
+  message: "",
+};
+
+const budgetOptions = [
+  "До 10 000 ₽",
+  "10 000 – 25 000 ₽",
+  "25 000 – 50 000 ₽",
+  "50 000 – 100 000 ₽",
+  "Более 100 000 ₽",
+];
 
 export function Contact() {
   const [form, setForm] = useState<FormState>(initialForm);
@@ -43,16 +60,36 @@ export function Contact() {
     return e;
   };
 
-  const onSubmit = async (ev: FormEvent) => {
+const onSubmit = async (ev: FormEvent) => {
     ev.preventDefault();
     const v = validate();
     setErrors(v);
     if (Object.keys(v).length > 0) return;
 
     setStatus("loading");
-    // Simulate sending. Replace with real API/telegram webhook here.
-    await new Promise((r) => setTimeout(r, 1600));
-    setStatus("success");
+    try {
+      const payload = {
+        name: form.name,
+        email: form.email,
+        telegram: form.telegram,
+        service: form.service || "Не указано",
+        budget: form.budget || "Не указано",
+        message: form.message,
+      };
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = (await res.json()) as { ok?: boolean; error?: string };
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error ?? "Ошибка отправки");
+      }
+      setStatus("success");
+    } catch (err) {
+      setErrors({ message: err instanceof Error ? err.message : "Ошибка отправки. Попробуйте ещё раз" });
+      setStatus("idle");
+    }
   };
 
   const reset = () => {
@@ -255,6 +292,48 @@ export function Contact() {
                       </AnimatePresence>
                     </div>
 
+<div>
+                      <label className="mb-2 flex items-center gap-1.5 text-xs font-medium text-slate-300">
+                        <MessageSquare className="h-3.5 w-3.5 text-cyan-400" />
+                        Услуга
+                      </label>
+                      <select
+                        value={form.service}
+                        onChange={(e) => set("service")(e.target.value)}
+                        className="w-full rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-3 text-sm text-white outline-none transition-colors focus:border-cyan-400/50"
+                      >
+                        <option value="" disabled className="bg-slate-900 text-slate-400">
+                          Выберите услугу
+                        </option>
+                        {services.map((s) => (
+                          <option key={s.title} value={s.title} className="bg-slate-900 text-white">
+                            {s.title}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="mb-2 flex items-center gap-1.5 text-xs font-medium text-slate-300">
+                        <Wallet className="h-3.5 w-3.5 text-cyan-400" />
+                        Бюджет
+                      </label>
+                      <select
+                        value={form.budget}
+                        onChange={(e) => set("budget")(e.target.value)}
+                        className="w-full rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-3 text-sm text-white outline-none transition-colors focus:border-cyan-400/50"
+                      >
+                        <option value="" disabled className="bg-slate-900 text-slate-400">
+                          Выберите примерный бюджет
+                        </option>
+                        {budgetOptions.map((b) => (
+                          <option key={b} value={b} className="bg-slate-900 text-white">
+                            {b}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
                     <div>
                       <label className="mb-2 flex items-center gap-1.5 text-xs font-medium text-slate-300">
                         <MessageSquare className="h-3.5 w-3.5 text-cyan-400" />
@@ -307,4 +386,3 @@ export function Contact() {
     </section>
   );
 }
-

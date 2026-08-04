@@ -36,7 +36,8 @@ src/
 ├── app/                 # страницы и глобальные стили (design system)
 │   ├── globals.css      # токены, glassmorphism, mesh-gradient, анимации
 │   ├── layout.tsx       # SEO-метаданные, шрифты, тема
-│   └── page.tsx         # сборка секций
+│   ├── page.tsx         # сборка секций
+│   └── api/contact/     # ⚡ API-роут: проксирует заявки в бэкенд
 ├── components/
 │   ├── ui/              # Button, Input, Textarea, Badge (shadcn-style)
 │   ├── effects/         # частицы, 3D-сетка, магнит, tilt, counter, ...
@@ -56,18 +57,22 @@ src/
 - `services` — услуги
 - `advantages` — блок «Почему я»
 
-## Подключение формы
+## 🔌 Интеграция с Telegram-ботом (заявки)
 
-Форма в `Contact` сейчас имитирует отправку. Чтобы отправлять заявки реально (например, в Telegram-бот), замените блок в `src/components/sections/contact.tsx`:
+Форма в `src/components/sections/contact.tsx` теперь реально отправляет заявки:
 
-```ts
-// вместо await new Promise(...)
-const res = await fetch("/api/contact", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(form),
-});
+1. Поля: **Имя, Телефон, Email, Telegram, Бюджет, Услуга, Описание, Файлы**
+2. Данные уходят в `src/app/api/contact/route.ts`
+3. Роут проксирует их в бэкенд `POST /api/orders` (папка `bot_zakaz`)
+4. Бэкенд сохраняет заявку в БД и отправляет уведомление в Telegram-бот
+
+Настройка адреса бэкенда в **`.env`**:
+
+```env
+BACKEND_URL=http://localhost:5000
 ```
+
+> Бэкенд, Telegram-бот CRM и админ-панель находятся в папке **`bot_zakaz`**.
 
 ## Производительность
 
@@ -75,4 +80,3 @@ const res = await fetch("/api/contact", {
 - Статическая генерация страниц (SSG)
 - Минимальный First Load JS ≈ 189 kB
 - Адаптивность от 320px до 4K
-
