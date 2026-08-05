@@ -4,9 +4,8 @@ import {
   clearDialog,
   getAdminIds,
   getDialog,
-  getStats,
+getStats,
   isAdmin,
-  registerAdmin,
   sendOrderNotification,
   setDialog,
   trackStartedOrder,
@@ -234,9 +233,7 @@ export async function handleUpdate(update: Update): Promise<void> {
   const text = (msg.text ?? "").trim();
   const firstName = msg.from?.first_name ?? "гость";
 
-  // Первый контакт — регистрируем владельца (первого, кто написал боту)
-  await registerAdmin(chatId);
-  // Учитываем уникального пользователя в статистике
+// Учитываем уникального пользователя в статистике
   await trackUser(chatId);
   const isOwner = await isAdmin(chatId);
   const dialog = await getDialog(chatId);

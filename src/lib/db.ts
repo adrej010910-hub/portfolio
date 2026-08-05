@@ -233,16 +233,11 @@ function envAdminIds(): number[] {
 }
 
 export async function getAdminIds(): Promise<number[]> {
-  const ids = new Set<number>();
-  envAdminIds().forEach((id) => ids.add(id));
-  const kvRaw = (await get("admins")) ?? "";
-  kvRaw
-    .split(",")
-    .filter(Boolean)
-    .map(Number)
-    .filter((n) => !Number.isNaN(n))
-    .forEach((id) => ids.add(id));
-  return [...ids];
+  // Уведомления о заказах и доступ к /stats получает ТОЛЬКО
+  // владелец, указанный в TELEGRAM_ADMIN_IDS (переменная окружения).
+  // Список admins из KV больше не используется — это исключает
+  // возможность получения уведомлений посторонними пользователями.
+  return envAdminIds();
 }
 
 export async function isAdmin(chatId: number): Promise<boolean> {
@@ -272,15 +267,6 @@ export async function sendOrderNotification(order: Order): Promise<void> {
   ];
 
   for (const id of ids) await sendMessage(id, lines.join("\n"));
-}
-
-export async function registerAdmin(chatId: number): Promise<void> {
-  if ((await getAdminIds()).includes(chatId)) return;
-  // Если администратор задан только в env — не дублируем в KV,
-  // но для простоты регистрируем первого пользователя бота в KV.
-  const list = (await get("admins")) ?? "";
-  const updated = list ? `${list},${chatId}` : String(chatId);
-  await set("admins", updated);
 }
 
 // -----------------------------------------------------
