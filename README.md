@@ -11,7 +11,7 @@ Premium-портфолио для начинающего фрилансера: �
 - **GSAP** — плавные scroll-анимации
 - **Lenis** — smooth scroll
 - **Three.js / React Three Fiber** — 3D-эффекты
-- **next-themes** — тёмная/светлая тема
+- **Собственный ThemeProvider** — тёмная/светлая тема (без внешних зависимостей, синхронизация с системой)
 - **Lucide Icons**
 
 ## Быстрый старт
@@ -59,20 +59,55 @@ src/
 
 ## 🔌 Интеграция с Telegram-ботом (заявки)
 
-Форма в `src/components/sections/contact.tsx` теперь реально отправляет заявки:
+Проект содержит **полностью автономного Telegram-бота** для оформления заказов прямо в Next.js — без внешнего бэкенда.
 
-1. Поля: **Имя, Телефон, Email, Telegram, Бюджет, Услуга, Описание, Файлы**
-2. Данные уходят в `src/app/api/contact/route.ts`
-3. Роут проксирует их в бэкенд `POST /api/orders` (папка `bot_zakaz`)
-4. Бэкенд сохраняет заявку в БД и отправляет уведомление в Telegram-бот
+### Возможности бота
+- **`/start`** — приветствие и список команд
+- **`/order`** — оформление заказа в 5 шагов (имя → Telegram → услуга → бюджет → описание)
+- **`/stats`** — статистика заказов (доступно владельцу): пользователи бота, всего заявок, за сегодня / за 7 дней, конверсия, разбивка по источникам и услугам, последние заявки
+- **`/help`** — помощь
 
-Настройка адреса бэкенда в **`.env`**:
+### Как это работает
+1. Форма на сайте (`src/components/sections/contact.tsx`) → `POST /api/contact`
+2. Заявки из бота → webhook `POST /api/telegram` → `src/lib/bot.ts`
+3. Оба источника сохраняются через `src/lib/db.ts` и **отправляют уведомления владельцу** в Telegram
+4. Данные хранятся в **Vercel KV** (Upstash Redis), с in-memory fallback для локальной разработки
+
+### Требуемые переменные окружения (в Vercel → Settings → Environment Variables)
 
 ```env
-BACKEND_URL=http://localhost:5000
+# Токен бота от @BotFather
+TELEGRAM_BOT_TOKEN=123456:ABC-DEF...
+
+# ID владельца(ев) для доступа к /stats (через запятую)
+TELEGRAM_ADMIN_IDS=123456789
+
+# Секрет для настройки webhook (любая строка)
+WEBHOOK_SECRET=my-secret
+
+# Vercel KV (подключите KV Store к проекту — переменные добавятся автоматически)
+KV_REST_API_URL=...
+KV_REST_API_TOKEN=...
+
+# Токен для просмотра статистики через API (любая строка)
+STATS_API_TOKEN=my-stats-token
 ```
 
-> Бэкенд, Telegram-бот CRM и админ-панель находятся в папке **`bot_zakaz`**.
+### Настройка webhook (после деплоя)
+Откройте один раз в браузере:
+```
+https://<ВАШ_VERCEL_URL>/api/telegram?setup=webhook&secret=<WEBHOOK_SECRET>
+```
+Или вручную:
+```
+https://api.telegram.org/bot<TELEGRAM_BOT_TOKEN>/setWebhook?url=<URL>/api/telegram
+```
+
+### Статистика через API
+```
+GET https://<ВАШ_VERCEL_URL>/api/stats
+Authorization: Bearer <STATS_API_TOKEN>
+```
 
 ## Производительность
 
