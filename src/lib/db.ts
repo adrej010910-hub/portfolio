@@ -30,6 +30,9 @@ export type Stats = {
   total: number;
   today: number;
   week: number;
+  users: number;
+  startedOrders: number;
+  conversion: number;
   byService: Record<string, number>;
   bySource: Record<string, number>;
   recent: Order[];
@@ -150,7 +153,7 @@ export async function addOrder(input: OrderInput): Promise<Order> {
 const dayKeys = Array.from({ length: 7 }, (_, i) => dayKeyOffset(i));
 
 export async function getStats(): Promise<Stats> {
-  const [total, today, weekNum, siteCount, botCount] = await Promise.all([
+  const [total, today, weekNum, siteCount, botCount, users, started] = await Promise.all([
     Number((await get("stat:total")) ?? 0),
     Number((await get(`stat:day:${dayKeys[0]}`)) ?? 0),
     (async () => {
@@ -160,6 +163,8 @@ export async function getStats(): Promise<Stats> {
     })(),
     Number((await get("stat:source:site")) ?? 0),
     Number((await get("stat:source:bot")) ?? 0),
+    Number((await get("stat:users")) ?? 0),
+    Number((await get("stat:started")) ?? 0),
   ]);
 
   const byService: Record<string, number> = {};
@@ -180,14 +185,39 @@ export async function getStats(): Promise<Stats> {
     .filter((o): o is Order => o !== null)
     .reverse();
 
+  const conversion = started > 0 ? Math.round((total / started) * 100) : 0;
+
   return {
     total,
     today,
     week: weekNum,
+    users,
+    startedOrders: started,
+    conversion,
     byService,
     bySource: { site: siteCount, bot: botCount },
     recent,
   };
+}
+
+/**
+ * Регистрирует уникального пользователя бота (для статистики).
+ * Вызывается при первом обращении к боту.
+ */
+export async function trackUser(chatId: number): Promise<void> {
+  const key = `user:${chatId}`;
+  const existing = await get(key);
+  if (existing) return;
+  await set(key, "1");
+  await incr("stat:users");
+}
+
+/**
+ * Отмечает, что пользователь начал оформление заказа (/order).
+ * Используется для расчёта конверсии.
+ */
+export async function trackStartedOrder(): Promise<void> {
+  await incr("stat:started");
 }
 
 // -----------------------------------------------------

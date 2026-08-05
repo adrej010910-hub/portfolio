@@ -9,6 +9,8 @@ import {
   registerAdmin,
   sendOrderNotification,
   setDialog,
+  trackStartedOrder,
+  trackUser,
 } from "@/lib/db";
 import { escapeHtml, sendMessage } from "@/lib/telegram";
 
@@ -67,38 +69,49 @@ async function notifyAdmins(data: {
 // -----------------------------------------------------
 async function handleStats(chatId: number): Promise<void> {
   const stats = await getStats();
-  const serviceLines =
-    Object.keys(stats.byService).length > 0
-      ? Object.entries(stats.byService)
-          .map(([k, v]) => `▫️ ${escapeHtml(k)} — <b>${v}</b>`)
-          .join("\n")
-      : "пока нет";
 
-  const text =
-    `📊 <b>Статистика заказов</b>\n` +
-    `━━━━━━━━━━━━━━\n` +
-    `🔢 Всего заявок: <b>${stats.total}</b>\n` +
-    `📅 Сегодня: <b>${stats.today}</b>\n` +
-    `🗓 За 7 дней: <b>${stats.week}</b>\n` +
-    `\n<b>По источникам:</b>\n` +
-    `🌐 Сайт: <b>${stats.bySource.site}</b>\n` +
-    `🤖 Telegram-бот: <b>${stats.bySource.bot}</b>\n` +
-    `\n<b>По услугам:</b>\n${serviceLines}\n` +
-    `\n<b>Последние заявки:</b>\n` +
-    (stats.recent.length > 0
-      ? stats.recent
-          .slice(0, 5)
-          .map((o) => `• ${escapeHtml(o.name)} — ${escapeHtml(o.service)}`)
-          .join("\n")
-      : "пока нет");
+  const lines = [
+    `📊 <b>Статистика</b> 📈`,
+    `━━━━━━━━━━━━━━`,
+    `👥 Пользователей бота: <b>${stats.users}</b>`,
+    `🔢 Всего заявок: <b>${stats.total}</b>`,
+    `📅 Сегодня: <b>${stats.today}</b>`,
+    `🗓 За 7 дней: <b>${stats.week}</b>`,
+    ``,
+    `<b>Конверсия оформления:</b>`,
+    `🚀 Начали заказ: <b>${stats.startedOrders}</b>`,
+    `✅ Завершили заказ: <b>${stats.total}</b>`,
+    `💯 Конверсия: <b>${stats.conversion}%</b>`,
+    ``,
+    `<b>По источникам:</b>`,
+    `🌐 Сайт: <b>${stats.bySource.site}</b>`,
+    `🤖 Telegram-бот: <b>${stats.bySource.bot}</b>`,
+  ];
 
-  await sendMessage(chatId, text);
+  if (Object.keys(stats.byService).length > 0) {
+    lines.push(``, `<b>По услугам:</b>`);
+    lines.push(
+      ...Object.entries(stats.byService)
+        .slice(0, 6)
+        .map(([k, v]) => `▫️ ${escapeHtml(k)} — <b>${v}</b>`)
+    );
+  }
+
+  if (stats.recent.length > 0) {
+    lines.push(``, `<b>Последние заявки:</b>`);
+    lines.push(
+      ...stats.recent.slice(0, 5).map((o) => `• ${escapeHtml(o.name)} — ${escapeHtml(o.service)}`)
+    );
+  }
+
+  await sendMessage(chatId, lines.join("\n"));
 }
 
 // -----------------------------------------------------
 // Оформление заказа
 // -----------------------------------------------------
 async function startOrder(chatId: number): Promise<void> {
+  await trackStartedOrder();
   await setDialog(chatId, { step: STEPS.orderName, data: {} });
   const text =
     `🚀 <b>Оформление заказа</b>\n\n` +
@@ -223,6 +236,8 @@ export async function handleUpdate(update: Update): Promise<void> {
 
   // Первый контакт — регистрируем владельца (первого, кто написал боту)
   await registerAdmin(chatId);
+  // Учитываем уникального пользователя в статистике
+  await trackUser(chatId);
   const isOwner = await isAdmin(chatId);
   const dialog = await getDialog(chatId);
 
@@ -283,4 +298,3 @@ export async function handleUpdate(update: Update): Promise<void> {
 }
 
 export { STEPS };
-
