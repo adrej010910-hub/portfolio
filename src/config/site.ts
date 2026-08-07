@@ -10,7 +10,7 @@ export const siteConfig = {
   behance: "https://behance.net/andrey",
   location: "Россия · работаю удалённо по всему миру",
   stats: [
-    { value: 3, suffix: "+", label: "Проекта в портфолио" },
+    { value: 4, suffix: "+", label: "Проекта в портфолио" },
     { value: 3, suffix: "", label: "Карточки для маркетплейсов" },
     { value: 24, suffix: "/7", label: "На связи для клиентов" },
     { value: 100, suffix: "%", label: "Вовлечённость в проект" },
@@ -130,6 +130,16 @@ export const projects = [
     image: "/portfolio/work-3.png",
     href: "#",
     link: undefined,
+  },
+  {
+    title: "IRON PEAK — премиальный фитнес-клуб",
+    tag: "Сайт · HTML/CSS/JS",
+    desc: "Полноценный многостраничный сайт для премиального фитнес-клуба с анимациями, видео-фоном, адаптивным дизайном, галереей, тарифами и формой записи. Современный премиум-дизайн.",
+    tech: ["HTML", "CSS", "JavaScript", "GSAP", "Lenis"],
+    accent: "from-orange-500 via-red-500 to-rose-500",
+    image: "/portfolio/iron-peak.png",
+    href: "#",
+    link: "https://iron-peak-gamma.vercel.app",
   },
 ] as const;
 
