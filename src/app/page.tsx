@@ -1,40 +1,5 @@
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
-import { ScrollProgress } from "@/components/layout/scroll-progress";
-import { BackToTop } from "@/components/layout/back-to-top";
-import { SmoothScroll } from "@/components/effects/smooth-scroll";
-import { CursorGlow } from "@/components/effects/cursor-glow";
-import { NoiseOverlay } from "@/components/effects/noise-overlay";
-import { Hero } from "@/components/sections/hero";
-import { MarqueeStrip } from "@/components/sections/marquee-strip";
-import { About } from "@/components/sections/about";
-import { Skills } from "@/components/sections/skills";
-import { Portfolio } from "@/components/sections/portfolio";
-import { Services } from "@/components/sections/services";
-import { WhyMe } from "@/components/sections/why-me";
-import { Contact } from "@/components/sections/contact";
-
-export default function Home() {
-  return (
-    <>
-      <ScrollProgress />
-      <SmoothScroll />
-      <CursorGlow />
-      <NoiseOverlay />
-      <Navbar />
-      <main className="relative">
-        <Hero />
-        <MarqueeStrip />
-        <About />
-        <Skills />
-        <Portfolio />
-        <Services />
-        <WhyMe />
-        <Contact />
-      </main>
-      <Footer />
-      <BackToTop />
-    </>
-  );
-}
-
+"use client";
+import Link from "next/link";
+import { motion } from "framer-motion";
+const projects=[{n:"01",name:"NEON AI",type:"AI / SaaS / Product Design",href:"/neon",image:"https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=1800&q=85",desc:"A cinematic AI automation platform balancing product clarity with a premium dark interface."},{n:"02",name:"NOVA ATELIER",type:"Fashion / Art Direction / E-commerce",href:"/nova",image:"https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1800&q=85",desc:"An editorial commerce experience built around restraint, image direction and tactile typography."},{n:"03",name:"ARKEN STUDIO",type:"Architecture / Editorial / Web Design",href:"/arken",image:"https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1800&q=85",desc:"A monochrome architectural journal with an asymmetric project archive and measured motion."}];
+export default function Home(){return <main className="min-h-screen bg-[#f3f2ee] text-[#151515] selection:bg-black selection:text-white"><nav className="fixed top-0 z-50 flex w-full items-center justify-between px-5 py-5 mix-blend-difference text-white md:px-10"><span className="font-semibold tracking-[-.04em]">SELECTED WORKS</span><span className="text-[10px] uppercase tracking-[.25em] opacity-70">Portfolio / 2026</span></nav><section className="flex min-h-screen flex-col justify-end px-5 pb-8 pt-28 md:px-10 md:pb-10"><div className="mb-auto pt-16 text-[11px] uppercase tracking-[.22em] text-black/50">Digital designer + frontend developer</div><div className="grid gap-10 md:grid-cols-[1.6fr_.7fr] md:items-end"><h1 className="max-w-6xl text-[clamp(4.5rem,13vw,12rem)] font-medium leading-[.78] tracking-[-.075em]">SELECTED<br/>WORKS</h1><p className="max-w-sm text-sm leading-6 text-black/55">Three fictional commercial worlds designed to show range: technology, fashion and architecture — each with its own visual language, interaction model and frontend character.</p></div></section><section className="px-5 pb-10 md:px-10">{projects.map((p,i)=><motion.article key={p.name} initial={{opacity:0,y:60}} whileInView={{opacity:1,y:0}} viewport={{once:true,margin:"-10%"}} transition={{duration:.8,delay:i*.05}} className="group border-t border-black/15 py-6"><Link href={p.href} className="grid gap-6 md:grid-cols-[70px_1fr_1.7fr] md:items-start"><span className="text-[11px] tracking-[.2em] text-black/40">{p.n}</span><div><h2 className="text-3xl font-medium tracking-[-.05em] md:text-5xl">{p.name}</h2><p className="mt-2 text-[10px] uppercase tracking-[.18em] text-black/45">{p.type}</p></div><div className="relative aspect-[16/8] overflow-hidden bg-black"><img src={p.image} alt="" className="h-full w-full object-cover grayscale transition duration-1000 group-hover:scale-[1.04] group-hover:grayscale-0"/></div><div className="md:col-start-2 md:col-span-2 flex items-end justify-between"><p className="max-w-md text-sm leading-6 text-black/55">{p.desc}</p><span className="hidden rounded-full border border-black/20 px-4 py-2 text-[10px] uppercase tracking-[.16em] md:block">View project ↗</span></div></Link></motion.article>)}</section><footer className="flex flex-col gap-8 border-t border-black/15 px-5 py-8 text-[10px] uppercase tracking-[.2em] text-black/45 md:flex-row md:items-center md:justify-between md:px-10"><span>Independent digital practice</span><span>UI / UX / Art Direction / Frontend</span><span>© 2026</span></footer></main>}
