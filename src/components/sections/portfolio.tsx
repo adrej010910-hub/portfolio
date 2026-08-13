@@ -40,11 +40,17 @@ function ProjectMock({ image, accent, title }: { image: string; accent: string; 
 
 export function Portfolio() {
   const [filter, setFilter] = useState<"all" | "websites" | "marketplaces">("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [previewImage, setPreviewImage] = useState<{ src: string; title: string; desc: string } | null>(null);
 
   const filteredProjects = projects.filter((p) => {
-    if (filter === "all") return true;
-    return p.category === filter;
+    const matchesCategory = filter === "all" || p.category === filter;
+    const matchesSearch =
+      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.tag.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.tech.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCategory && matchesSearch;
   });
 
   return (
@@ -68,38 +74,50 @@ export function Portfolio() {
             </p>
           </div>
 
-          {/* Category Filter Tabs */}
-          <div className="mt-8 flex flex-wrap gap-2 border-b border-white/10 pb-4">
-            <button
-              onClick={() => setFilter("all")}
-              className={`rounded-full px-5 py-2 text-xs font-medium transition-all ${
-                filter === "all"
-                  ? "bg-gradient-to-r from-cyan-500 to-indigo-500 text-white shadow-lg shadow-indigo-500/25"
-                  : "bg-white/[0.04] text-slate-400 hover:bg-white/[0.08] hover:text-white"
-              }`}
-            >
-              Все работы ({projects.length})
-            </button>
-            <button
-              onClick={() => setFilter("websites")}
-              className={`rounded-full px-5 py-2 text-xs font-medium transition-all ${
-                filter === "websites"
-                  ? "bg-gradient-to-r from-cyan-500 to-indigo-500 text-white shadow-lg shadow-indigo-500/25"
-                  : "bg-white/[0.04] text-slate-400 hover:bg-white/[0.08] hover:text-white"
-              }`}
-            >
-              Веб-сайты ({projects.filter((p) => p.category === "websites").length})
-            </button>
-            <button
-              onClick={() => setFilter("marketplaces")}
-              className={`rounded-full px-5 py-2 text-xs font-medium transition-all ${
-                filter === "marketplaces"
-                  ? "bg-gradient-to-r from-cyan-500 to-indigo-500 text-white shadow-lg shadow-indigo-500/25"
-                  : "bg-white/[0.04] text-slate-400 hover:bg-white/[0.08] hover:text-white"
-              }`}
-            >
-              Маркетплейсы ({projects.filter((p) => p.category === "marketplaces").length})
-            </button>
+          {/* Category Filter Tabs & Search */}
+          <div className="mt-8 flex flex-col gap-4 border-b border-white/10 pb-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setFilter("all")}
+                className={`rounded-full px-5 py-2 text-xs font-medium transition-all ${
+                  filter === "all"
+                    ? "bg-gradient-to-r from-cyan-500 to-indigo-500 text-white shadow-lg shadow-indigo-500/25"
+                    : "bg-white/[0.04] text-slate-400 hover:bg-white/[0.08] hover:text-white"
+                }`}
+              >
+                Все работы ({projects.length})
+              </button>
+              <button
+                onClick={() => setFilter("websites")}
+                className={`rounded-full px-5 py-2 text-xs font-medium transition-all ${
+                  filter === "websites"
+                    ? "bg-gradient-to-r from-cyan-500 to-indigo-500 text-white shadow-lg shadow-indigo-500/25"
+                    : "bg-white/[0.04] text-slate-400 hover:bg-white/[0.08] hover:text-white"
+                }`}
+              >
+                Веб-сайты ({projects.filter((p) => p.category === "websites").length})
+              </button>
+              <button
+                onClick={() => setFilter("marketplaces")}
+                className={`rounded-full px-5 py-2 text-xs font-medium transition-all ${
+                  filter === "marketplaces"
+                    ? "bg-gradient-to-r from-cyan-500 to-indigo-500 text-white shadow-lg shadow-indigo-500/25"
+                    : "bg-white/[0.04] text-slate-400 hover:bg-white/[0.08] hover:text-white"
+                }`}
+              >
+                Маркетплейсы ({projects.filter((p) => p.category === "marketplaces").length})
+              </button>
+            </div>
+
+            <div className="relative w-full sm:w-64">
+              <input
+                type="text"
+                placeholder="Поиск проектов и технологий..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs text-white placeholder-slate-400 focus:border-cyan-400 focus:outline-none"
+              />
+            </div>
           </div>
         </Reveal>
 
