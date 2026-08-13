@@ -10,9 +10,9 @@ export const siteConfig = {
   behance: "https://behance.net/andrey",
   location: "Россия · работаю удалённо по всему миру",
   stats: [
-    { value: 4, suffix: "+", label: "Проекта в портфолио" },
-    { value: 3, suffix: "", label: "Карточки для маркетплейсов" },
-    { value: 24, suffix: "/7", label: "На связи для клиентов" },
+    { value: 9, suffix: "", label: "Проектов в портфолио" },
+    { value: 3, suffix: "", label: "Карточки маркетплейсов" },
+    { value: 5, suffix: "", label: "Демо-сайтов в портфолио" },
     { value: 100, suffix: "%", label: "Вовлечённость в проект" },
   ],
 } as const;
@@ -101,9 +101,11 @@ export const skills = [
 ] as const;
 
 export const projects = [
+  // Существующие карточки маркетплейсов (не удалять)
   {
     title: "Продающий баннер для карточки товара",
     tag: "Маркетплейсы · WB",
+    category: "marketplaces",
     desc: "Широкий инфографический баннер с преимуществами товара: яркие акценты, иконки и структура, которая ведёт покупателя к решению о покупке.",
     tech: ["Figma", "Photoshop", "Wildberries"],
     accent: "from-violet-500 via-purple-600 to-indigo-600",
@@ -114,6 +116,7 @@ export const projects = [
   {
     title: "Комплект инфографики для Wildberries",
     tag: "Маркетплейсы · WB",
+    category: "marketplaces",
     desc: "Полный набор карточек: главное фото, размерная сетка, преимущества и стоп-мотивы. Контент, который продаёт без слов.",
     tech: ["Figma", "Photoshop", "Wildberries"],
     accent: "from-pink-500 via-rose-500 to-fuchsia-500",
@@ -124,6 +127,7 @@ export const projects = [
   {
     title: "Карточка товара для Ozon",
     tag: "Маркетплейсы · Ozon",
+    category: "marketplaces",
     desc: "Инфографика, адаптированная под требования Ozon: чёткая структура, характеристики и комплектация в удобном для покупателя формате.",
     tech: ["Photoshop", "Figma", "Ozon"],
     accent: "from-cyan-400 via-blue-500 to-indigo-500",
@@ -134,12 +138,69 @@ export const projects = [
   {
     title: "IRON PEAK — премиальный фитнес-клуб",
     tag: "Сайт · HTML/CSS/JS",
-    desc: "Полноценный многостраничный сайт для премиального фитнес-клуба с анимациями, видео-фоном, адаптивным дизайном, галереей, тарифами и формой записи. Современный премиум-дизайн.",
+    category: "websites",
+    desc: "Полноценный многостраничный сайт для премиального фитнес-клуба с анимациями, видео-фоном, адаптивным дизайном, галереей, тарифами и формой записи.",
     tech: ["HTML", "CSS", "JavaScript", "GSAP", "Lenis"],
     accent: "from-orange-500 via-red-500 to-rose-500",
     image: "/portfolio/iron-peak.png",
-    href: "#",
+    href: "https://iron-peak-gamma.vercel.app",
     link: "https://iron-peak-gamma.vercel.app",
+  },
+  // 5 Новых полноценных демонстрационных сайтов
+  {
+    title: "LUXE ESTATE — Премиальная недвижимость",
+    tag: "Сайт · Real Estate",
+    category: "websites",
+    desc: "Современный сайт элитной недвижимости: фильтрация объектов, интерактивные карточки вилл и пентхаусов, планировки, фотогалерея и форма заявки.",
+    tech: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
+    accent: "from-amber-500 via-emerald-600 to-teal-700",
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1200&auto=format&fit=crop",
+    href: "/projects/real-estate",
+    link: "/projects/real-estate",
+  },
+  {
+    title: "SYNTHEX AI — SaaS & AI Стартап",
+    tag: "Сайт · AI / SaaS",
+    category: "websites",
+    desc: "Футуристичный landing page для AI-платформы: интерактивный генератор запросов, сравнение тарифных планов, анимации и тёмная технологичная тема.",
+    tech: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    accent: "from-purple-600 via-indigo-600 to-cyan-500",
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop",
+    href: "/projects/ai-saas",
+    link: "/projects/ai-saas",
+  },
+  {
+    title: "AURA STUDIO — Премиум E-Commerce",
+    tag: "Сайт · Fashion Brand",
+    category: "websites",
+    desc: "Элегантный интернет-магазин люксовой одежды: каталог товаров с фильтрацией, карточка с выбором размеров и интерактивная корзина покупок.",
+    tech: ["Next.js", "React", "Tailwind CSS", "Cart State"],
+    accent: "from-stone-600 via-zinc-800 to-neutral-900",
+    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1200&auto=format&fit=crop",
+    href: "/projects/fashion-store",
+    link: "/projects/fashion-store",
+  },
+  {
+    title: "VORTEX — Digital & Web Agency",
+    tag: "Сайт · Digital Agency",
+    category: "websites",
+    desc: "Креативный сайт веб-агентства с выразительной типографикой, выбранными интерактивными кейсами, процессом работы и калькулятором проекта.",
+    tech: ["Next.js", "Framer Motion", "Tailwind CSS", "Editorial UI"],
+    accent: "from-rose-500 via-fuchsia-600 to-indigo-600",
+    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop",
+    href: "/projects/digital-agency",
+    link: "/projects/digital-agency",
+  },
+  {
+    title: "L'ÉTOILE — Премиальный Ресторан",
+    tag: "Сайт · Fine Dining",
+    category: "websites",
+    desc: "Атмосферный кинематографичный сайт авторского ресторана: интерактивное меню по категориям, галерея блюд и онлайн-бронирование столиков.",
+    tech: ["Next.js", "Tailwind CSS", "Framer Motion", "Validation"],
+    accent: "from-amber-700 via-rose-900 to-stone-900",
+    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop",
+    href: "/projects/restaurant",
+    link: "/projects/restaurant",
   },
 ] as const;
 
