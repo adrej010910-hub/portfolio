@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, ExternalLink, Sparkles } from "lucide-react";
+import { ArrowUpRight, ExternalLink, Sparkles, Eye, X } from "lucide-react";
 import { TiltCard } from "@/components/effects/tilt-card";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/effects/reveal";
 import { projects } from "@/config/site";
@@ -40,6 +40,7 @@ function ProjectMock({ image, accent, title }: { image: string; accent: string; 
 
 export function Portfolio() {
   const [filter, setFilter] = useState<"all" | "websites" | "marketplaces">("all");
+  const [previewImage, setPreviewImage] = useState<{ src: string; title: string; desc: string } | null>(null);
 
   const filteredProjects = projects.filter((p) => {
     if (filter === "all") return true;
@@ -63,7 +64,7 @@ export function Portfolio() {
               </h2>
             </div>
             <p className="max-w-md text-sm text-slate-400 leading-relaxed">
-              Демонстрационные веб-сайты и продающая инфографика для маркетплейсов. Нажмите на проект, чтобы перейти на полноценный интерактивный сайт.
+              Демонстрационные веб-сайты и продающая инфографика для маркетплейсов. Нажмите на проект, чтобы перейти на полноценный сайт или открыть просмотр.
             </p>
           </div>
 
@@ -120,7 +121,12 @@ export function Portfolio() {
                         <ProjectMock image={project.image} accent={project.accent} title={project.tag} />
                       </a>
                     ) : (
-                      <ProjectMock image={project.image} accent={project.accent} title={project.tag} />
+                      <div
+                        onClick={() => setPreviewImage({ src: project.image, title: project.title, desc: project.desc })}
+                        className="block cursor-pointer"
+                      >
+                        <ProjectMock image={project.image} accent={project.accent} title={project.tag} />
+                      </div>
                     )}
 
                     <div className="flex flex-1 flex-col p-6">
@@ -162,9 +168,13 @@ export function Portfolio() {
                             <ExternalLink className="h-3.5 w-3.5" />
                           </a>
                         ) : (
-                          <span className="inline-flex h-9 items-center gap-1.5 rounded-full bg-white/[0.06] px-4 text-xs font-semibold text-slate-300">
-                            Инфографика WB / Ozon
-                          </span>
+                          <button
+                            onClick={() => setPreviewImage({ src: project.image, title: project.title, desc: project.desc })}
+                            className="inline-flex h-9 items-center gap-1.5 rounded-full bg-white/[0.08] px-4 text-xs font-semibold text-white transition-all duration-300 hover:bg-white/20"
+                          >
+                            <Eye className="h-3.5 w-3.5 text-cyan-400" />
+                            Просмотр дизайна
+                          </button>
                         )}
                       </div>
                     </div>
@@ -175,6 +185,31 @@ export function Portfolio() {
           })}
         </StaggerGroup>
       </div>
+
+      {/* Lightbox Modal for Marketplace Cards */}
+      {previewImage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+          <div className="relative max-h-[90vh] w-full max-w-3xl overflow-hidden rounded-3xl border border-white/15 bg-slate-900 p-6 shadow-2xl">
+            <button
+              onClick={() => setPreviewImage(null)}
+              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <h3 className="text-xl font-bold text-white">{previewImage.title}</h3>
+            <p className="mt-1 text-xs text-slate-400">{previewImage.desc}</p>
+            <div className="relative mt-4 aspect-[16/10] overflow-hidden rounded-2xl bg-black">
+              <Image
+                src={previewImage.src}
+                alt={previewImage.title}
+                fill
+                sizes="100vw"
+                className="object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
