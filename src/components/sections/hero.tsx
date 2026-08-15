@@ -21,8 +21,8 @@ export function Hero() {
 
   const container = { hidden: {}, show: { transition: { staggerChildren: 0.13, delayChildren: 0.25 } } };
   const wordAnim = {
-    hidden: { opacity: 0, y: 80, filter: "blur(14px)" },
-    show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 1, ease: [0.22, 1, 0.36, 1] as const } },
+    hidden: { opacity: 0, y: 50, filter: "blur(10px)" },
+    show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] as const } },
   };
 
   return (
@@ -42,15 +42,15 @@ export function Hero() {
               <Sparkles className="h-3.5 w-3.5 text-cyan-300" />
             </motion.div>
 
-            <motion.h1 variants={container} initial="hidden" animate="show" className="font-display max-w-6xl text-[clamp(3.2rem,8vw,8rem)] font-bold leading-[0.9] tracking-[-0.055em] text-white">
+            <motion.h1 variants={container} initial="hidden" animate="show" className="font-display max-w-5xl text-[clamp(2.7rem,6.2vw,6.2rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-white sm:leading-[0.96]">
               {titleLines.map((line, i) => (
-                <span key={line} className="block overflow-hidden pb-2">
+                <span key={line} className="block overflow-hidden pb-1.5">
                   <motion.span variants={wordAnim} className={i === 1 ? "text-gradient block" : "block"}>{line}</motion.span>
                 </span>
               ))}
             </motion.h1>
 
-            <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1, duration: 0.9 }} className="mt-8 max-w-2xl text-base leading-relaxed text-slate-400 sm:text-lg">
+            <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1, duration: 0.9 }} className="mt-7 max-w-2xl text-base leading-7 text-slate-400 sm:text-lg sm:leading-8">
               {siteConfig.subheading}
             </motion.p>
 
