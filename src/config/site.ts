@@ -11,9 +11,9 @@ export const siteConfig = {
   location: "Россия · работаю удалённо по всему миру",
   stats: [
     { value: 6, suffix: "+", label: "web-проектов" },
-    { value: 5, suffix: "", label: "концептуальных сайтов" },
-    { value: 5, suffix: "+", label: "frontend-технологий" },
-    { value: 100, suffix: "%", label: "внимания к деталям" },
+    { value: 5, suffix: "+", label: "frontend-инструментов" },
+    { value: 3, suffix: "+", label: "motion-подходов" },
+    { value: 1, suffix: "", label: "фокус: качество" },
   ],
 } as const;
 
