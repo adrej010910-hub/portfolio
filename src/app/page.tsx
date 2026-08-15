@@ -6,7 +6,6 @@ import { SmoothScroll } from "@/components/effects/smooth-scroll";
 import { CursorGlow } from "@/components/effects/cursor-glow";
 import { NoiseOverlay } from "@/components/effects/noise-overlay";
 import { Hero } from "@/components/sections/hero";
-import { MarqueeStrip } from "@/components/sections/marquee-strip";
 import { About } from "@/components/sections/about";
 import { Skills } from "@/components/sections/skills";
 import { Portfolio } from "@/components/sections/portfolio";
@@ -24,7 +23,6 @@ export default function Home() {
       <Navbar />
       <main className="relative">
         <Hero />
-        <MarqueeStrip />
         <About />
         <Skills />
         <Portfolio />
