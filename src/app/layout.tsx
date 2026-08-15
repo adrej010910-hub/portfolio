@@ -3,6 +3,7 @@ import { Manrope, Unbounded } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
+import "./visual-comfort.css";
 
 const manrope = Manrope({
   subsets: ["latin", "cyrillic"],
@@ -58,7 +59,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-<html lang="ru" suppressHydrationWarning>
+    <html lang="ru" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
