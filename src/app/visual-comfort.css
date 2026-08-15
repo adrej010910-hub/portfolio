@@ -1,0 +1,16 @@
+/* Light theme readability: reduce grain, grid contrast and glow intensity. */
+:root:not(.dark) .noise-overlay {
+  opacity: 0.008 !important;
+}
+
+:root:not(.dark) .grid-3d-line {
+  opacity: 0.32 !important;
+}
+
+:root:not(.dark) .mesh-gradient {
+  opacity: 0.18 !important;
+}
+
+:root:not(.dark) canvas {
+  opacity: 0.22 !important;
+}
